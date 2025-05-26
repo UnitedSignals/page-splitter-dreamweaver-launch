@@ -1,0 +1,4 @@
+package.json merge=ours
+vite.config.ts merge=ours
+.github/workflows/deploy.yml merge=ours
+
