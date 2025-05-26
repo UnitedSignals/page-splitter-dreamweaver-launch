@@ -1,4 +1,4 @@
-name: Deploy Lovable Landingpage to GitHub Pages
+name: Deploy Lovable Page to GitHub Pages
 
 on:
   push:
@@ -11,22 +11,24 @@ permissions:
   id-token: write
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build site
+      - name: Build project
         run: npm run build
+
+      - name: Debug output (optional)
+        run: ls -al dist
 
       - name: Upload to GitHub Pages
         uses: actions/upload-pages-artifact@v3
@@ -34,13 +36,12 @@ jobs:
           path: dist
 
   deploy:
-    needs: build-and-deploy
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
-
